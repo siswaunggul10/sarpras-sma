@@ -343,7 +343,7 @@ async function startServer() {
     res.json(photos);
   });
 
-  app.post("/api/photos", upload.single("photo"), (req, res) => {
+  app.post("/api/photos", upload.single("photo"), (req: any, res) => {
     const { object_type, object_id, caption } = req.body;
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
@@ -378,9 +378,10 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    app.use(express.static(path.join(__dirname, "dist")));
+    const distPath = path.join(process.cwd(), "dist");
+    app.use(express.static(distPath));
     app.get("*", (req, res) => {
-      res.sendFile(path.join(__dirname, "dist", "index.html"));
+      res.sendFile(path.join(distPath, "index.html"));
     });
   }
 
